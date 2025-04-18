@@ -1,20 +1,20 @@
-import React from "react";
-import Box from '@mui/material/Box';
-import ModeSelect from '../../components/ModeSelect';
+import React from 'react'
+import Box from '@mui/material/Box'
+import ModeSelect from '~/components/ModeSelect'
 
 function AppBar() {
   return (
     <Box
       sx={{
-        backgroundColor: "primary.light",
-        width: "100%",
+        backgroundColor: 'primary.light',
+        width: '100%',
         height: (theme) => theme.trello.appBarHeight,
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center'
       }}>
       <ModeSelect />
     </Box>
-  );
+  )
 }
 
-export default AppBar;
+export default AppBar
