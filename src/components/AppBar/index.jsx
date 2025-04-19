@@ -16,6 +16,7 @@ import Badge from '@mui/material/Badge'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 
 function AppBar() {
   return (
@@ -26,6 +27,7 @@ function AppBar() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        paddingX: 2,
         gap: 2,
         overflow: 'auto'
       }}>
@@ -41,7 +43,7 @@ function AppBar() {
           <Recent />
           <Status />
           <Templates />
-          <Button variant='outlined'>Create</Button>
+          <Button variant='outlined' startIcon={ <LibraryAddIcon/> }>Create</Button>
         </Box>
 
       </Box>

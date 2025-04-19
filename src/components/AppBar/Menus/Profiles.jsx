@@ -22,7 +22,7 @@ function Profiles() {
     setAnchorEl(null)
   }
   return (
-    <Box sx={{ paddingRight: '10px' }}>
+    <Box>
       <Tooltip title="Account settings">
         <IconButton
           onClick={handleClick}
