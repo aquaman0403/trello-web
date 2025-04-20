@@ -21,6 +21,7 @@ function Status() {
   return (
     <Box>
       <Button
+        sx={{ color: 'white' }}
         id="basic-button-status"
         aria-controls={open ? 'basic-menu-status' : undefined}
         aria-haspopup="true"

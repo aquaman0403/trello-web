@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles'
-import { cyan, deepOrange, orange, teal } from '@mui/material/colors'
 
 // Create a theme instance.
 const theme = createTheme({
@@ -10,18 +9,13 @@ const theme = createTheme({
 
   colorSchemes:{
     light:{
-      palette: {
-        primary: teal,
-        secondary: deepOrange
-      }
+      
     },
     dark:{
-      palette: {
-        primary: cyan,
-        secondary: orange
-      }
+
     }
   },
+  
   components: {
     MuiCssBaseline: {
       styleOverrides: {
@@ -31,11 +25,11 @@ const theme = createTheme({
             height: '8px'
           },
           '*::-webkit-scrollbar-thumb': {
-            backgroundColor: '#bdc3c7',
+            backgroundColor: '#dcdde1',
             borderRadius: '8px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#1abc9c',
+            backgroundColor: 'white',
             borderRadius: '8px'
           }
         }
@@ -50,27 +44,15 @@ const theme = createTheme({
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: ({ theme }) => {
-          return {
-            color: theme.palette.primary.main,
-            fontSize: '0.875rem',
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.primary.main
-            },
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.primary.main
-            }
-          }
+        root: {
+          fontSize: '0.875rem'
         }
       }
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: ({ theme }) => {
-          return {
-            color: theme.palette.primary.main,
-            fontSize: '0.875rem'
-          }
+        root: {
+          fontSize: '0.875rem'
         }
       }
     }
