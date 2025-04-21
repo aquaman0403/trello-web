@@ -11,7 +11,7 @@ import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
 
 function ModeSelect() {
   const { mode, setMode } = useColorScheme()
-
+  const safeMode = mode || 'system'
   const handleChange = (event) => {
     const selectedMode = event.target.value
     setMode(selectedMode)
@@ -19,7 +19,7 @@ function ModeSelect() {
 
   return (
     <FormControl sx={{ minWidth: 120 }} size="small">
-      <InputLabel 
+      <InputLabel
         id="label-select-dark-light-mode"
         sx={{
           color: 'white',
@@ -31,7 +31,7 @@ function ModeSelect() {
       <Select
         labelId="label-select-dark-light-mode"
         id="select-dark-light-mode"
-        value={mode}
+        value={safeMode}
         label="Mode"
         onChange={handleChange}
         sx={{
