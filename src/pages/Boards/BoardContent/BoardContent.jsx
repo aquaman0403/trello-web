@@ -5,8 +5,8 @@ import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
   DragOverlay,
-  MouseSensor,
-  TouchSensor,
+  // MouseSensor,
+  // TouchSensor,
   useSensor,
   useSensors,
   defaultDropAnimationSideEffects,
@@ -16,6 +16,7 @@ import {
   getFirstCollision
   // closestCenter
 } from '@dnd-kit/core'
+import { MouseSensor, TouchSensor } from '~/customLibraries/DnDKitSensors'
 import { useEffect, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import { cloneDeep, isEmpty } from 'lodash'
