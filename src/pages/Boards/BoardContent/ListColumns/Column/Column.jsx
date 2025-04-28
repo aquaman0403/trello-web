@@ -18,14 +18,13 @@ import Button from '@mui/material/Button'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
 import Box from '@mui/material/Box'
-import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -45,7 +44,8 @@ function Column({ column }) {
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  // Cards đã được sắp xếp ở component cha cao nhất (Boards/_id.jsx)
+  const orderedCards = column.cards
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
@@ -57,6 +57,15 @@ function Column({ column }) {
       toast.error('Please enter Card Title!', { position: 'bottom-right' })
       return
     }
+
+    // Tạo dữ liệu Column để gọi API
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+
+    createNewCard(newCardData)
+
     // Gọi API ở đây
 
     toggleNewCardForm()

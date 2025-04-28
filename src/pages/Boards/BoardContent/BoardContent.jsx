@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from 'react'
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
   DragOverlay,
@@ -30,7 +29,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -57,7 +56,8 @@ function BoardContent({ board }) {
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    // Columns đã được sắp xếp ở component cha cap nhất (Boards/_id.jsx) rồi
+    setOrderedColumns(board?.columns)
   }, [board])
 
   // Tìm một column theo CardId
@@ -213,17 +213,22 @@ function BoardContent({ board }) {
 
         const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
 
+        const dndOrderedCardIds = dndOrderedCards.map(card => card._id)
+
         setOrderedColumns(prevColumns => {
           const nextColumns = cloneDeep(prevColumns)
           const targetColumn = nextColumns.find((column) => column._id === overColumn._id)
 
           // Cập nhật lại 2 giá trị mới là card và cardOrderIds trong targetColumn
           targetColumn.cards = dndOrderedCards
-          targetColumn.cardOrderIds = dndOrderedCards.map(card => card._id)
+          targetColumn.cardOrderIds = dndOrderedCardIds
 
           // Trả về state mới chuẩn vị trí
           return nextColumns
         })
+
+        // Gọi lên props function moveCardInTheSameColumn nằm ờ component cha cao nhất (Boards/_index.jsx)
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
     }
 
@@ -235,10 +240,11 @@ function BoardContent({ board }) {
         const oldColumnIndex = orderedColumns.findIndex((column) => column._id === active.id)
         const newColumnIndex = orderedColumns.findIndex((column) => column._id === over.id)
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
-        // const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
 
-        // Cập nhật lại state column ban đầu sau khi kéo thả
+        // Cập nhật lại state column ban đầu sau khi kéo thả để tránh delay hoặc flicker
         setOrderedColumns(dndOrderedColumns)
+
+        moveColumns(dndOrderedColumns)
       }
     }
 
@@ -304,7 +310,11 @@ function BoardContent({ board }) {
           p: '10px 0'
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={ activeDragItemData }/> }
