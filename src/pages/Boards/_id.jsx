@@ -10,7 +10,8 @@ import {
   createNewColumnAPI,
   createNewCardAPI,
   updateBoardDetailsAPI,
-  updateColumnDetailsAPI
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnAPI
 } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
@@ -92,7 +93,7 @@ function Board() {
 
   /**
    * Khi di chuyển card trong cùng 1 column:
-   * Chỉ cần gọi API để cập nhật mảng cardOrderIds trong column chứa nó (thay đỏi vị trí trong mảng)
+   * Chỉ cần gọi API để cập nhật mảng cardOrderIds trong column chứa nó (thay đổi vị trí trong mảng)
    */
   const moveCardInTheSameColumn = (dndOrderedCards, dndOrderedCardIds, columnId) => {
     // Cap nhat lai cho chuan du lieu State Board
@@ -106,6 +107,31 @@ function Board() {
 
     // Call API update Column
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds })
+  }
+
+  /**
+   * Khi di chuyển card sang column khác:
+   * B1: Cập nhật mảng cardOrderIds trong column ban đầu chứa nó (Hiểu bản chất lá xoá _id của Card ra khỏi mảng)
+   * B2: Cập nhật mảng cardOrderIds của column tiếp theo (Hiểu bản chất là thêm _id của Card vào mảng)
+   * B3: Cập nhật lại trường columnId mới của cái Card đã kéo
+   * => Làm 1 API support riêng
+   */
+  const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+    // Cap nhat lai cho chuan du lieu State Board
+    const dndOrderedColumnsIds = dndOrderedColumns.map((column) => column._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    // Gọi API xử lý phía BE
+    moveCardToDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: dndOrderedColumns.find(column => column._id === prevColumnId)?.cardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find(column => column._id === nextColumnId)?.cardOrderIds
+    })
   }
 
   if (!board) {
@@ -134,6 +160,7 @@ function Board() {
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
+        moveCardToDifferentColumn={moveCardToDifferentColumn}
       />
     </Container>
   )
