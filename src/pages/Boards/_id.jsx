@@ -11,13 +11,15 @@ import {
   createNewCardAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-  moveCardToDifferentColumnAPI
+  moveCardToDifferentColumnAPI,
+  deleteColumnDetailsAPI
 } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utils/sorts'
 import { Box, Typography } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -72,8 +74,14 @@ function Board() {
     const newBoard = { ...board }
     const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
     if (columnToUpdate) {
-      columnToUpdate.cards.push(createdCard)
-      columnToUpdate.cardOrderIds.push(createdCard._id)
+      // Nếu column rỗng: bản chất là đang chứa cái placeholderCard
+      if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
     }
     setBoard(newBoard)
   }
@@ -125,12 +133,30 @@ function Board() {
     setBoard(newBoard)
 
     // Gọi API xử lý phía BE
+    let prevCardOrderIds = dndOrderedColumns.find(column => column._id === prevColumnId)?.cardOrderIds
+    if (prevCardOrderIds[0].includes('placeholder-card')) {
+      prevCardOrderIds = []
+    }
+
     moveCardToDifferentColumnAPI({
       currentCardId,
       prevColumnId,
-      prevCardOrderIds: dndOrderedColumns.find(column => column._id === prevColumnId)?.cardOrderIds,
+      prevCardOrderIds,
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find(column => column._id === nextColumnId)?.cardOrderIds
+    })
+  }
+
+  // Xử lý xoá 1 Column và tất cả các Card trong Column đó
+  const deleteColumnDetails = (columnId) => {
+    // Update cho chuẩn dữ liệu State Board
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(column => column._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(columnId => columnId !== columnId)
+    setBoard(newBoard)
+    // Gọi API xóa Column
+    deleteColumnDetailsAPI(columnId).then(res => {
+      toast.success(res?.deleteResult)
     })
   }
 
@@ -156,11 +182,13 @@ function Board() {
       <BoardBar board={board} />
       <BoardContent
         board={board}
+
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )
