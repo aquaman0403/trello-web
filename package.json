@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
+    "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.9.0",
     "cross-env": "^7.0.3",
     "lodash": "^4.17.21",
@@ -24,6 +25,7 @@
     "npm": "^11.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-redux": "^9.1.0",
     "react-toastify": "^11.0.5"
   },
   "devDependencies": {
