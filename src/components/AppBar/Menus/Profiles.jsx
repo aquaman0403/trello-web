@@ -10,7 +10,9 @@ import Tooltip from '@mui/material/Tooltip'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { selectCurrentUser, logoutUserAPI } from '~/redux/user/userSlice'
+import { useConfirm } from 'material-ui-confirm'
 
 function Profiles() {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -21,6 +23,26 @@ function Profiles() {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const dispatch = useDispatch()
+  const currentUser = useSelector(selectCurrentUser)
+
+  const confirmLogout = useConfirm()
+  const hnadleLogout = async () => {
+    const { confirmed, reason } = await confirmLogout({
+      title: 'Logout of your account?',
+      confirmationText: 'Confirm',
+      cancellationText: 'Cancel'
+    })
+
+    if (confirmed) {
+      dispatch(logoutUserAPI())
+    }
+    else if (reason) {
+      // Không làm gì cả, chỉ cần đóng dialog
+    }
+  }
+
   return (
     <Box>
       <Tooltip title="Account settings">
@@ -34,7 +56,7 @@ function Profiles() {
         >
           <Avatar
             sx={{ width: 36, height: 36 }}
-            src='https://robohash.org/ecaefdd8febabb14cacab434b2457736?set=set4&bgset=&size=400x400'/>
+            src={currentUser?.avatar}/>
         </IconButton>
       </Tooltip>
       <Menu
@@ -42,15 +64,18 @@ function Profiles() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        onClick={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button-profiles'
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar sx={{ width: 32, height: 32, mr: 2 }}/> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar sx={{ width: 32, height: 32, mr: 2 }}/> My account
+        <MenuItem sx={{
+          '&:hover': { color: 'success.light' }
+        }}>
+          <Avatar
+            sx={{ width: 32, height: 32, mr: 2 }}
+            src={currentUser?.avatar}
+          /> Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
@@ -65,9 +90,16 @@ function Profiles() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={hnadleLogout} sx={{
+          '&:hover': {
+            color: 'warning.dark',
+            '& .logout-icon': {
+              color: 'warning.dark'
+            }
+          }
+        }}>
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <Logout className="logout-icon" fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>
