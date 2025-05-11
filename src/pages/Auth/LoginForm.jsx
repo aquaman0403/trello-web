@@ -40,7 +40,6 @@ function LoginForm() {
       dispatch(loginUserAPI({ email, password })),
       { pending: 'Logging in...' }
     ).then(res => {
-      console.log(res)
       // Kiểm tra không có lỗi (login thành công) thì mới redirect về route
       if (!res.error) {
         navigate('/')
