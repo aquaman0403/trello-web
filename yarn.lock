@@ -121,7 +121,7 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@babel/runtime@^7.23.9":
+"@babel/runtime@^7.23.9", "@babel/runtime@^7.27.1":
   version "7.27.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.1.tgz#9fce313d12c9a77507f264de74626e87fd0dc541"
   integrity sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==
@@ -677,6 +677,15 @@
     "@mui/utils" "^7.0.2"
     prop-types "^15.8.1"
 
+"@mui/private-theming@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-7.1.0.tgz#257b82cdbd4ec63132f3fc14e121e5acb3ff6e40"
+  integrity sha512-4Kck4jxhqF6YxNwJdSae1WgDfXVg0lIH6JVJ7gtuFfuKcQCgomJxPvUEOySTFRPz1IZzwz5OAcToskRdffElDA==
+  dependencies:
+    "@babel/runtime" "^7.27.1"
+    "@mui/utils" "^7.1.0"
+    prop-types "^15.8.1"
+
 "@mui/styled-engine@^5.16.14":
   version "5.16.14"
   resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.16.14.tgz#f90fef5b4f8ebf11d48e1b1df8854a45bb31a9f5"
@@ -693,6 +702,18 @@
   integrity sha512-11Bt4YdHGlh7sB8P75S9mRCUxTlgv7HGbr0UKz6m6Z9KLeiw1Bm9y/t3iqLLVMvSHYB6zL8X8X+LmfTE++gyBw==
   dependencies:
     "@babel/runtime" "^7.27.0"
+    "@emotion/cache" "^11.13.5"
+    "@emotion/serialize" "^1.3.3"
+    "@emotion/sheet" "^1.4.0"
+    csstype "^3.1.3"
+    prop-types "^15.8.1"
+
+"@mui/styled-engine@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-7.1.0.tgz#3bf1d7856b98934585f7d03582bd74073db2a4b4"
+  integrity sha512-m0mJ0c6iRC+f9hMeRe0W7zZX1wme3oUX0+XTVHjPG7DJz6OdQ6K/ggEOq7ZdwilcpdsDUwwMfOmvO71qDkYd2w==
+  dependencies:
+    "@babel/runtime" "^7.27.1"
     "@emotion/cache" "^11.13.5"
     "@emotion/serialize" "^1.3.3"
     "@emotion/sheet" "^1.4.0"
@@ -727,12 +748,33 @@
     csstype "^3.1.3"
     prop-types "^15.8.1"
 
+"@mui/system@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@mui/system/-/system-7.1.0.tgz#5ecc0248fc7a8f5af772b52297105fcd512f1f03"
+  integrity sha512-iedAWgRJMCxeMHvkEhsDlbvkK+qKf9me6ofsf7twk/jfT4P1ImVf7Rwb5VubEA0sikrVL+1SkoZM41M4+LNAVA==
+  dependencies:
+    "@babel/runtime" "^7.27.1"
+    "@mui/private-theming" "^7.1.0"
+    "@mui/styled-engine" "^7.1.0"
+    "@mui/types" "^7.4.2"
+    "@mui/utils" "^7.1.0"
+    clsx "^2.1.1"
+    csstype "^3.1.3"
+    prop-types "^15.8.1"
+
 "@mui/types@^7.4.1":
   version "7.4.1"
   resolved "https://registry.npmjs.org/@mui/types/-/types-7.4.1.tgz"
   integrity sha512-gUL8IIAI52CRXP/MixT1tJKt3SI6tVv4U/9soFsTtAsHzaJQptZ42ffdHZV3niX1ei0aUgMvOxBBN0KYqdG39g==
   dependencies:
     "@babel/runtime" "^7.27.0"
+
+"@mui/types@^7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.4.2.tgz#fdeb9855a4968c360bcc998b9dba93e5f635b40f"
+  integrity sha512-edRc5JcLPsrlNFYyTPxds+d5oUovuUxnnDtpJUbP6WMeV4+6eaX/mqai1ZIWT62lCOe0nlrON0s9HDiv5en5bA==
+  dependencies:
+    "@babel/runtime" "^7.27.1"
 
 "@mui/types@~7.2.15":
   version "7.2.24"
@@ -758,6 +800,18 @@
   dependencies:
     "@babel/runtime" "^7.27.0"
     "@mui/types" "^7.4.1"
+    "@types/prop-types" "^15.7.14"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-is "^19.1.0"
+
+"@mui/utils@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-7.1.0.tgz#464c0c1bc8f57c07d934ac674f3dcc81ac24f68b"
+  integrity sha512-/OM3S8kSHHmWNOP+NH9xEtpYSG10upXeQ0wLZnfDgmgadTAk5F4MQfFLyZ5FCRJENB3eRzltMmaNl6UtDnPovw==
+  dependencies:
+    "@babel/runtime" "^7.27.1"
+    "@mui/types" "^7.4.2"
     "@types/prop-types" "^15.7.14"
     clsx "^2.1.1"
     prop-types "^15.8.1"
@@ -3103,6 +3157,11 @@ qrcode-terminal@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/qrcode-terminal/-/qrcode-terminal-0.12.0.tgz#bb5b699ef7f9f0505092a3748be4464fe71b5819"
   integrity sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==
+
+randomcolor@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/randomcolor/-/randomcolor-0.6.2.tgz#7a57362ae1a1278439aeed2c15e5deb8ea33f56d"
+  integrity sha512-Mn6TbyYpFgwFuQ8KJKqf3bqqY9O1y37/0jgSK/61PUxV4QfIMv0+K2ioq8DfOjkBslcjwSzRfIDEXfzA9aCx7A==
 
 react-dom@^19.0.0:
   version "19.1.0"
