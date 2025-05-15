@@ -20,6 +20,8 @@ import randomColor from 'randomcolor'
 import SidebarCreateBoardModal from './create'
 
 import { styled } from '@mui/material/styles'
+import { fetchBoardAPI } from '~/apis'
+import { DEFAULT_ITEMS_PER_PAGE, DEFAULT_PAGE } from '~/utils/constants'
 // Styles của mấy cái Sidebar item menu, gom lại ra đây cho gọn.
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -57,15 +59,18 @@ function Boards() {
   const page = parseInt(query.get('page') || '1', 10)
 
   useEffect(() => {
-    // Fake tạm 16 cái item thay cho boards
-    // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    setBoards([...Array(16)].map((_, i) => i))
-    // Fake tạm giả sử trong Database trả về có tổng 100 bản ghi boards
-    setTotalBoards(100)
+    // // Fake tạm 16 cái item thay cho boards
+    // // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    // setBoards([...Array(16)].map((_, i) => i))
+    // // Fake tạm giả sử trong Database trả về có tổng 100 bản ghi boards
+    // setTotalBoards(100)
 
-    // Gọi API lấy danh sách boards ở đây...
-    // ...
-  }, [])
+    // Gọi API lấy danh sách boards ở đây
+    fetchBoardAPI(location.search).then(res => {
+      setBoards(res.boards || [])
+      setTotalBoards(res.totalBoards || 0)
+    })
+  }, [location.search])
 
   // Lúc chưa tồn tại boards > đang chờ gọi api thì hiện loading
   if (!boards) {
@@ -77,8 +82,7 @@ function Boards() {
       <AppBar />
       <Box sx={{ paddingX: 2, my: 4 }}>
         <Grid container spacing={2}> {/* This is a container, so 'container' prop is correct */}
-          {/* <Grid item xs={12} sm={3}> OLD */}
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid size={{ xs: 12, sm: 3 }} lg={1}>
             <Stack direction="column" spacing={1}>
               <SidebarItem className="active">
                 <SpaceDashboardIcon fontSize="small" />
@@ -108,24 +112,24 @@ function Boards() {
 
             {/* Trường hợp gọi API và có boards trong Database trả về thì render danh sách boards */}
             {boards?.length > 0 &&
-              <Grid container spacing={2} columns={12}> {/* This is a container, 'container' and 'columns' props are correct */}
+              <Grid container spacing={2}>
                 {boards.map(b =>
-                  <Grid key={b} size={{ xs: 6, sm: 4, md: 3 }}> {/* NEW: 'item' prop removed. xs, sm, md define its size */}
+                  <Grid item key={b._id} xs={12} sm={6} md={4} lg={3}> {/* NEW: 'item' prop removed. xs, sm, md define its size */}
                     <Card sx={{ width: '250px' }}>
                       <Box sx={{ height: '50px', backgroundColor: randomColor() }}></Box>
                       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
                         <Typography gutterBottom variant="h6" component="div">
-                          Board title
+                          {b?.title}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
                           sx={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                          This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                          {b?.description}
                         </Typography>
                         <Box
                           component={Link}
-                          to={'/boards/680ceac3d54d3e1af8f36de0'}
+                          to={`/boards/${b._id}`}
                           sx={{
                             mt: 1,
                             display: 'flex',
@@ -152,14 +156,14 @@ function Boards() {
                   showFirstButton
                   showLastButton
                   // Giá trị prop count của component Pagination là để hiển thị tổng số lượng page, công thức là lấy Tổng số lượng bản ghi chia cho số lượng bản ghi muốn hiển thị trên 1 page (ví dụ thường để 12, 24, 26, 48...vv). sau cùng là làm tròn số lên bằng hàm Math.ceil
-                  count={Math.ceil(totalBoards / 12)}
+                  count={Math.ceil(totalBoards / DEFAULT_ITEMS_PER_PAGE)}
                   // Giá trị của page hiện tại đang đứng
                   page={page}
                   // Render các page item và đồng thời cũng là những cái link để chúng ta click chuyển trang
                   renderItem={(item) => (
                     <PaginationItem
                       component={Link}
-                      to={`/boards${item.page === 1 ? '' : `?page=${item.page}`}`}
+                      to={`/boards${item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`}`}
                       {...item}
                     />
                   )}
