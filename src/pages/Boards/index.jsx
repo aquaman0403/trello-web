@@ -4,7 +4,7 @@ import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid' // <-- NEW IMPORT
+import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard'
@@ -58,6 +58,10 @@ function Boards() {
    */
   const page = parseInt(query.get('page') || '1', 10)
 
+  const updateStateData = (res) => {
+    setBoards(res.boards || [])
+    setTotalBoards(res.totalBoards || 0)
+  }
   useEffect(() => {
     // // Fake tạm 16 cái item thay cho boards
     // // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -66,11 +70,13 @@ function Boards() {
     // setTotalBoards(100)
 
     // Gọi API lấy danh sách boards ở đây
-    fetchBoardAPI(location.search).then(res => {
-      setBoards(res.boards || [])
-      setTotalBoards(res.totalBoards || 0)
-    })
+    fetchBoardAPI(location.search).then(updateStateData)
   }, [location.search])
+
+  const afterCreateNewBoard = () => {
+    // Gọi lại API để lấy danh sách boards mới nhất sau khi tạo board mới thành công
+    fetchBoardAPI(location.search).then(updateStateData)
+  }
 
   // Lúc chưa tồn tại boards > đang chờ gọi api thì hiện loading
   if (!boards) {
@@ -99,7 +105,7 @@ function Boards() {
             </Stack>
             <Divider sx={{ my: 1 }} />
             <Stack direction="column" spacing={1}>
-              <SidebarCreateBoardModal />
+              <SidebarCreateBoardModal afterCreateNewBoard={afterCreateNewBoard} />
             </Stack>
           </Grid>
           <Grid size={{ xs: 12, sm: 9 }}>
