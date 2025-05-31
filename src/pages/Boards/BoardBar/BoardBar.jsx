@@ -12,6 +12,7 @@ import { Tooltip } from '@mui/material'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import Button from '@mui/material/Button'
 import { capitalizeFirstLetter } from '~/utils/formatters'
+import BoardUserGroup from './BoardUserGroup'
 
 const MENU_STYLE = {
   color: 'white',
@@ -88,56 +89,9 @@ function BoardBar({ board }) {
         >
           Invite
         </Button>
-        <AvatarGroup max={5}
-          sx={{
-            gap: '10px',
-            '& .MuiAvatar-root': {
-              width: 36,
-              height: 36,
-              fontSize: 16,
-              border: 'none',
-              color: 'white',
-              cursor: 'pointer',
-              '&:first-of-type': { bgcolor: '#a4b0be' }
-            }
-          }}>
-          <Tooltip title="valdimir">
-            <Avatar
-              alt="Vladimir Ducv"
-              src="/static/images/avatar/1.jpg"
-            />
-          </Tooltip>
-          <Tooltip title="valdimir">
-            <Avatar
-              alt="Vladimir Ducv"
-              src="/static/images/avatar/1.jpg"
-            />
-          </Tooltip>
-          <Tooltip title="valdimir">
-            <Avatar
-              alt="Vladimir Ducv"
-              src="/static/images/avatar/1.jpg"
-            />
-          </Tooltip>
-          <Tooltip title="valdimir">
-            <Avatar
-              alt="Vladimir Ducv"
-              src="/static/images/avatar/1.jpg"
-            />
-          </Tooltip>
-          <Tooltip title="valdimir">
-            <Avatar
-              alt="Vladimir Ducv"
-              src="/static/images/avatar/1.jpg"
-            />
-          </Tooltip>
-          <Tooltip title="valdimir">
-            <Avatar
-              alt="Vladimir Ducv"
-              src="/static/images/avatar/1.jpg"
-            />
-          </Tooltip>
-        </AvatarGroup>
+
+        {/** Xử lý hiển thị danh sách thành viên của board */}
+        <BoardUserGroup />
       </Box>
     </Box>
   )
