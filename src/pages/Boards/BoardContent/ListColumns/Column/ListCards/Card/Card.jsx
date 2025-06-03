@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useDispatch } from 'react-redux'
-import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { updateCurrentActiveCard, showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 
 function Card({ card }) {
@@ -36,6 +36,8 @@ function Card({ card }) {
   const setActiveCard = () => {
     // Cập nhật data cho active Card trong Redux
     dispatch(updateCurrentActiveCard(card))
+    // Show Modal
+    dispatch(showModalActiveCard())
   }
 
   return (

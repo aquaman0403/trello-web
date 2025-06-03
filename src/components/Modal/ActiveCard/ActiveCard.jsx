@@ -31,7 +31,12 @@ import CardUserGroup from './CardUserGroup'
 import CardDescriptionMdEditor from './CardDescriptionMdEditor'
 import CardActivitySection from './CardActivitySection'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCurrentActiveCard, selectCurrentActiveCard, updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import {
+  clearCurrentActiveCard,
+  selectCurrentActiveCard,
+  selectIsShowModalActiveCard,
+  updateCurrentActiveCard
+} from '~/redux/activeCard/activeCardSlice'
 import { updateCardDetailsAPI } from '~/apis'
 import { styled } from '@mui/material/styles'
 import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
@@ -62,6 +67,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
+  const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
 
   // Không dùng biến state để check đóng mở Modal nữa vì sẽ check bên Boards/_id.jsx
   // const [isOpen, setIsOpen] = useState(true)
@@ -94,7 +100,6 @@ function ActiveCard() {
   }
 
   const onUploadCardCover = (event) => {
-    console.log(event.target?.files[0])
     const error = singleFileValidator(event.target?.files[0])
     if (error) {
       toast.error(error)
@@ -110,10 +115,15 @@ function ActiveCard() {
     )
   }
 
+  // Dùng async await ở đây để component con CardActivitySection chờ và nếu thành công thì mới clear thẻ input comment
+  const onAddCardComment = async (commentToAdd) => {
+    await callApiUpdateCard({ commentToAdd })
+  }
+
   return (
     <Modal
       disableScrollLock
-      open={true}
+      open={isShowModalActiveCard}
       onClose={handleCloseModal} // Sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
       sx={{ overflowY: 'auto' }}>
       <Box sx={{
@@ -138,7 +148,7 @@ function ActiveCard() {
           <CancelIcon color="error" sx={{ '&:hover': { color: 'error.light' } }} onClick={handleCloseModal} />
         </Box>
 
-        {activeCard?.cover && 
+        {activeCard?.cover &&
           <Box sx={{ mb: 4 }}>
             <img
               style={{ width: '100%', height: '320px', borderRadius: '6px', objectFit: 'cover' }}
@@ -188,7 +198,10 @@ function ActiveCard() {
               </Box>
 
               {/* Feature 04: Xử lý các hành động, ví dụ comment vào Card */}
-              <CardActivitySection />
+              <CardActivitySection
+                cardComments={activeCard?.comments}
+                onAddCardComment={onAddCardComment}
+              />
             </Box>
           </Grid>
 
